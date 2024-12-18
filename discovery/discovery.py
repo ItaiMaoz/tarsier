@@ -13,7 +13,7 @@ import asyncio
 from langchain.agents import tool
 from dotenv import load_dotenv
 from typing import List, Optional
-from langchain_core.pydantic_v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 
 load_dotenv("../.env.local")
 
@@ -21,24 +21,24 @@ class NavigationElement(BaseModel):
     element_id: int = Field(description="Unique identifier for the element on the page")
     text: str = Field(description="Visible text of the navigation element")
     element_type: str = Field(description="Type of element (link, button, menu)")
-    xpath: str = Field(description="XPath location of the element")
-    target_url: Optional[str] = Field(None, description="URL that this element navigates to, if applicable")
+    # xpath: str = Field(description="XPath location of the element")
+    # target_url: Optional[str] = Field(None, description="URL that this element navigates to, if applicable")
 
 class InteractiveElement(BaseModel):
     element_id: int = Field(description="Unique identifier for the element on the page")
     element_type: str = Field(description="Type of interactive element (form, input, dropdown)")
     label: Optional[str] = Field(None, description="Label or placeholder text for the element")
-    xpath: str = Field(description="XPath location of the element")
+    # xpath: str = Field(description="XPath location of the element")
 
 class ContentStructure(BaseModel):
-    main_heading: Optional[str] = Field(None, description="Main heading of the page")
-    sub_headings: List[str] = Field(default_factory=list, description="List of subheadings on the page")
-    main_content: str = Field(description="Main textual content of the page")
+    # main_heading: Optional[str] = Field(None, description="Main heading of the page")
+    # sub_headings: List[str] = Field(default_factory=list, description="List of subheadings on the page")
+    main_content: str = Field(description="description of the content on the page")
 
 class PageNode(BaseModel):
     url: str = Field(description="URL of the page")
     title: str = Field(description="Title of the page")
-    timestamp: datetime = Field(description="Time when the page was analyzed")
+    # timestamp: datetime = Field(description="Time when the page was analyzed")
     navigation_elements: List[NavigationElement] = Field(
         default_factory=list,
         description="List of elements that can be used for navigation"
@@ -144,9 +144,10 @@ def setup_agent(tarsier, page):
     
     # Setup LLM and agent
     llm = ChatAnthropic(model_name="claude-3-5-sonnet-latest", temperature=0)
+    structured_llm = llm.with_structured_output(PageNode)
     agent = initialize_agent(
         [read_page, click, type_text, press_key],
-        llm,
+        structured_llm,
         agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,
         verbose=True,
     )
