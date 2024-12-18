@@ -1,0 +1,22 @@
+[project]
+name = "discovery"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "langchain-ollama>=0.2.1",
+    "langchain>=0.3.12",
+    "langchain-anthropic>=0.3.0",
+    "langchain-community>=0.3.12",
+    "playwright>=1.49.1",
+    "python-dotenv>=1.0.1",
+    "streamlit>=1.41.1",
+    "tarsier>=0.8.2",
+    "validators>=0.22.0",
+]
+
+[dependency-groups]
+dev = [
+    "prettier>=0.0.7",
+]
