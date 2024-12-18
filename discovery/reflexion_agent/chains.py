@@ -9,6 +9,7 @@ from langchain_core.output_parsers.openai_tools import (
     JsonOutputToolsParser,
     PydanticToolsParser
 )
+from langchain_core.output_parsers import PydanticOutputParser
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
@@ -24,7 +25,8 @@ llm = ChatOpenAI(model_name="gpt-4o-mini")
 # llm_model = "llama3.1:8b"
 
 parser_json = JsonOutputToolsParser(return_id=True)
-parser_pydantic = PydanticToolsParser(tools=[AnswerQuestion])
+# parser_pydantic = PydanticToolsParser(tools=[AnswerQuestion])
+parser_pydantic = PydanticOutputParser(pydantic_object=AnswerQuestion)
 
 actor_promt_template = ChatPromptTemplate.from_messages(
 [
